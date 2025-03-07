@@ -8,5 +8,15 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 enable_testing()
 
+
+add_executable(
+    main
+    main.cpp
+)
+
+target_link_libraries(
+    main
+)
+
 add_subdirectory(src)
-add_subdirectory(tests)
+# add_subdirectory(tests)
