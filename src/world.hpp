@@ -1,6 +1,8 @@
 #pragma once
 
-#include "utilities.hpp"
+#include <vector>
+
+#include "utils/hittable.hpp"
 
 class hittable_list : public hittable {
 private:
@@ -31,16 +33,3 @@ public:
     }
     friend class world;
 };
-
-color ray_color(const ray& ray, hittable_list& objs) {
-    hit_record record{};
-    bool t = objs.hit(ray, 0, inf, record);
-    if (t) {
-        return 0.5 * color(record.normal + 1);
-    }
-
-    vec3 unit = unit_vector(ray.direction());
-    double y =
-        .5 * (unit.y() + 1.0);  // generally it depends on viewport height
-    return (1.0 - y) * color{1.0, 1.0, 1.0} + y * color{.2, .2, 1.0};
-}
