@@ -13,9 +13,9 @@ private:
 public:
     hittable_list() { hitbox = aabb::empty; }
     ~hittable_list() {
-        // for (auto& object : *objs) {
-        //     delete object;
-        // }
+        for (auto& object : *objs) {
+            delete object;
+        }
         // delete bvh;
         delete objs;
     }
