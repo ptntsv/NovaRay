@@ -20,8 +20,11 @@ struct interval {
         lo = std::min(i1.lo, i2.lo);
         hi = std::max(i1.hi, i2.hi);
     }
+
     double len() const { return hi - lo; }
-    bool contains(double x) const { return lo <= x && x <= hi; }
+
+    bool contains(const double x) const { return lo <= x && x <= hi; }
+
     bool overlaps(const interval& other) const {
         assert(lo <= hi);
         assert(other.lo <= other.hi);
@@ -29,13 +32,16 @@ struct interval {
         double tmax = std::min(other.hi, hi);
         return tmin <= tmax;
     }
+
     friend std::ostream& operator<<(std::ostream& os, const interval& i) {
         os << "[" << i.lo << ";" << i.hi << "]";
         return os;
     }
+
     bool operator==(const interval& other) const {
         return other.lo == lo && other.hi == hi;
     }
+
     static const interval empty;
 };
 

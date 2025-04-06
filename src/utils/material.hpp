@@ -10,17 +10,20 @@ protected:
     color albedo;
 
 public:
-    ~material() = default;
     material(const color& albedo) : albedo(albedo) {}
+
     virtual bool scatter(const ray& ray_in, const hit_record& rec,
                          color& attenuation, ray& scattered) const {
         return false;
     }
+
+    ~material() = default;
 };
 
 class lambertian_reflectance : public material {
 public:
-    lambertian_reflectance(const color& albedo) : material(albedo) {};
+    lambertian_reflectance(const color& albedo) : material(albedo) {}
+
     bool scatter(const ray& ray_in, const hit_record& rec, color& attenuation,
                  ray& scattered) const override {
         vec3 scattered_dir = rec.normal + vec::random_unit();
@@ -34,7 +37,8 @@ public:
 
 class metal : public material {
 public:
-    metal(const color& albedo) : material(albedo) {};
+    metal(const color& albedo) : material(albedo) {}
+
     bool scatter(const ray& ray_in, const hit_record& rec, color& attenuation,
                  ray& scattered) const override {
         vec3 reflected_dir = vec::reflected(ray_in.direction(), rec.normal);

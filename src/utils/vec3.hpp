@@ -11,22 +11,21 @@ class vec3 {
 public:
     double e[3];
 
-    vec3(double e = 0) : e{e, e, e} {}
-    vec3(double e0, double e1, double e2) : e{e0, e1, e2} {}
-    vec3(const vec3& other)
-        : e{
-              other.e[0],
-              other.e[1],
-              other.e[2],
-          } {};
+    vec3(const double e = 0) : e{e, e, e} {}
+
+    vec3(const double e0, const double e1, const double e2) : e{e0, e1, e2} {}
+
+    vec3(const vec3& other): e {other.e[0], other.e[1], other.e[2]} {}
 
     double x() const { return e[0]; }
     double y() const { return e[1]; }
     double z() const { return e[2]; }
 
     vec3 operator-() const { return vec3(-e[0], -e[1], -e[2]); }
-    double operator[](int i) const { return e[i]; }
-    double& operator[](int i) { return e[i]; }
+
+    double operator[](const int i) const { return e[i]; }
+
+    double& operator[](const int i) { return e[i]; }
 
     vec3& operator+=(const vec3& v) {
         e[0] += v.e[0];
@@ -35,21 +34,22 @@ public:
         return *this;
     }
 
-    vec3& operator*=(double t) {
+    vec3& operator*=(const double t) {
         e[0] *= t;
         e[1] *= t;
         e[2] *= t;
         return *this;
     }
 
-    vec3& operator/=(double t) { return *this *= 1 / t; }
+    vec3& operator/=(const double t) { return *this *= 1 / t; }
 
     double length() const { return std::sqrt(length_squared()); }
 
     double length_squared() const {
         return e[0] * e[0] + e[1] * e[1] + e[2] * e[2];
     }
-    bool near_zero() {
+
+    bool near_zero() const {
         double d = 1e-8;
         return (std::abs(e[0]) < d) && (std::abs(e[1]) < d) &&
                (std::abs(e[2]) < d);
@@ -77,7 +77,8 @@ vec3 operator-(const vec3& v, const vec3& w) {
 vec3 operator*(const vec3& v, const vec3& w) {
     return vec3(v[0] * w[0], v[1] * w[1], v[2] * w[2]);
 }
-vec3 operator*(double t, const vec3& v) {
+
+vec3 operator*(const double t, const vec3& v) {
     return vec3(t * v[0], t * v[1], t * v[2]);
 }
 
@@ -104,10 +105,11 @@ vec3 random(double min, double max) {
                 utility::random_double(min, max),
                 utility::random_double(min, max)};
 }
+
 vec3 random_unit() {
     while (true) {
         vec3 p = vec::random(-1, 1);
-        double len_sq = p.length_squared();
+        const double len_sq = p.length_squared();
         if (1e-160 < len_sq && len_sq <= 1)
             return p / sqrt(len_sq);
     }
@@ -120,5 +122,6 @@ vec3 random_unit_on_hemisphere(const vec3& normal) {
         return on_surface;
     return -on_surface;
 }
+
 vec3 reflected(const vec3& v, const vec3& n) { return v - 2 * dot(v, n) * n; }
 }  // namespace vec
