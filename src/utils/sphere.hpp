@@ -10,8 +10,7 @@ class sphere : public hittable {
     material* mat;
 
 public:
-    bool hit(const ray& ray, const double& tmin, const double& tmax,
-             hit_record& record) {
+    bool hit(const ray& ray, interval tint, hit_record& record) override {
         vec3 oc = center - ray.origin();
         vec3 d = ray.direction();
         double a = d.length_squared();
@@ -22,9 +21,9 @@ public:
             return false;
         double dsqrt = std::sqrt(discriminant);
         double root = (t - dsqrt) / a;
-        if (root < tmin || tmax < root) {
+        if (root < tint.lo || tint.hi < root) {
             root = (t + dsqrt) / a;
-            if (root < tmin || tmax < root)
+            if (root < tint.lo || tint.hi < root)
                 return false;
         }
         record.t = root;
@@ -34,6 +33,8 @@ public:
         return true;
     }
     sphere(const point3& center, const double& r, material* mat)
-        : center(center), r(std::fmax(0, r)), mat(mat) {}
+        : center(center), r(std::fmax(0, r)), mat(mat) {
+        hitbox = aabb{center - r, center + r};
+    }
     ~sphere() { delete mat; }
 };

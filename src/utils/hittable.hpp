@@ -1,5 +1,6 @@
 #pragma once
 
+#include "aabb.hpp"
 #include "ray.hpp"
 
 class material;
@@ -18,7 +19,7 @@ struct hit_record {
 
 class hittable {
 public:
-    virtual bool hit(const ray& ray, const double& tmin, const double& tmax,
-                     hit_record& record) = 0;
+    aabb hitbox = aabb::empty;
+    virtual bool hit(const ray& ray, interval tint, hit_record& record) = 0;
     virtual ~hittable() = default;
 };

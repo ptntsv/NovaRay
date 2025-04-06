@@ -7,13 +7,14 @@ FetchContent_MakeAvailable(googletest)
 enable_testing()
 
 add_executable(
-    # executable
+    bvh_tests
+    bvh_tests.cpp
 )
 
 target_link_libraries(
-    # executable
+    bvh_tests
     GTest::gtest_main
 )
 
 include(GoogleTest)
-gtest_discover_tests(#[[executable]])
+gtest_discover_tests(bvh_tests)

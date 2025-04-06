@@ -1,6 +1,6 @@
 #pragma once
 
-// is it a bad idea to depend on headers order while including this file?
+#include <cmath>
 #include <limits>
 #include <random>
 
@@ -11,6 +11,8 @@ double random_double(double min, double max) {
     static std::mt19937 gen;
     return distr(gen);
 }
+
+double degrees_to_radians(double degrees) { return degrees / 180.0 * M_PI; }
 
 double clamp(double x, double lo, double hi) {
     if (x < lo)
