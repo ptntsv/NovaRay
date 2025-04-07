@@ -3,6 +3,6 @@
 #include "src/demos.hpp"
 
 int main() {
-    bulky_demo();
+    motion_blur();
     return 0;
 }

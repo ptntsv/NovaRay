@@ -33,13 +33,25 @@ public:
 };
 
 class metal : public material {
+    double fuzz_;
+
 public:
-    metal(const color& albedo) : material(albedo) {};
+    metal(const color& albedo, double fuzz = 0.0)
+        : material(albedo), fuzz_(fuzz < 1 ? fuzz : 1) {};
     bool scatter(const ray& ray_in, const hit_record& rec, color& attenuation,
                  ray& scattered) const override {
         vec3 reflected_dir = vec::reflected(ray_in.direction(), rec.normal);
-        scattered = ray{rec.p, reflected_dir};
+
+        vec3 fuzzy_direction =
+            reflected_dir +
+            fuzz_ * random_in_unit_sphere();  // ..................new
+
+        scattered = ray(rec.p, fuzzy_direction,
+                        ray_in.time());  // ..................new
+
         attenuation = albedo;
-        return true;
+
+        return (vec::dot(fuzzy_direction, rec.normal)) >
+               0;  // ..................new
     }
 };

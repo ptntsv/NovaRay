@@ -122,3 +122,10 @@ vec3 random_unit_on_hemisphere(const vec3& normal) {
 }
 vec3 reflected(const vec3& v, const vec3& n) { return v - 2 * dot(v, n) * n; }
 }  // namespace vec
+vec3 random_in_unit_sphere() {
+    double theta = utility::random_double(0, 2 * M_PI);
+    double phi = utility::random_double(0, M_PI);
+    double r = utility::random_double(0, 1);
+    return vec3(r * sin(phi) * cos(theta), r * sin(phi) * sin(theta),
+                r * cos(phi));
+}

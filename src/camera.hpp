@@ -1,11 +1,11 @@
 #pragma once
 #include <iostream>
 
+#include "hittable_list.hpp"
 #include "utils/color.hpp"
 #include "utils/material.hpp"
 #include "utils/utils.hpp"
 #include "utils/vec3.hpp"
-#include "hittable_list.hpp"
 
 struct viewport {
     double width, height;
@@ -60,7 +60,9 @@ class camera {
         vec3 offset = sample_square();
         point3 pixel_sample = vp_.first_pixel + ((i + offset.x()) * vp_.du) +
                               ((j + offset.y()) * vp_.dv);
-        return ray{lookfrom, pixel_sample - lookfrom};
+        double ray_time = utility::random_double(0, 1);
+
+        return ray{lookfrom, pixel_sample - lookfrom, ray_time};
     }
 
     // generates a ray
@@ -92,11 +94,11 @@ class camera {
             ray scattered;
             color attenuation;
             if (record.mat->scatter(r, record, attenuation, scattered)) {
-                return attenuation *
-                       ray_color(ray{record.p, scattered.direction()}, objs,
-                                 depth + 1);
+                // return attenuation *
+                //        ray_color(ray{record.p, scattered.direction()}, objs,
+                //                  depth + 1);
+                return attenuation * ray_color(scattered, objs, depth + 1);
             }
-            // return 0.5 * color(record.normal + 1);
             return color{0};
         }
 

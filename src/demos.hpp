@@ -46,3 +46,15 @@ void metals_demo() {
     camera cam({0, 0, 0}, {0, 0, -1}, {0, 1, 0}, 90);
     cam.render(world);
 }
+void motion_blur() {
+    hittable_list world;
+    auto material_ground = new lambertian_reflectance(color(0.8, 0.8, 0.0));
+    auto material_center = new lambertian_reflectance(color(0.1, 0.2, 0.5));
+    auto material_right = new metal(color(0.8, 0.6, 0.2), 0.3);
+    world.add(new sphere(point3(0.0, -100.5, -1.0), 100.0, material_ground));
+    world.add(new sphere(point3(0.0, 0.0, -1.2), 0.5, material_center));
+    world.add(new sphere(point3(0.5, 0.0, -1.0), point3(0.5, 0.25, -1.0), 0.5,
+                         material_right));
+    camera cam({-1.5, 0.5, 0}, {0, 0, -1}, {0, 1, 0}, 90);
+    cam.render(world);
+}
