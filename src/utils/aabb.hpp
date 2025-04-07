@@ -22,9 +22,12 @@ public:
     aabb(const interval& tx, const interval& ty, const interval& tz)
         : ts{tx, ty, tz} {}
     aabb(const point3& p1, const point3& p2) {
-        ts[0] = interval{p1.x(), p2.x()};
-        ts[1] = interval{p1.y(), p2.y()};
-        ts[2] = interval{p1.z(), p2.z()};
+        ts[0] =
+            (p1[0] < p2[0]) ? interval{p1[0], p2[0]} : interval{p2[0], p1[0]};
+        ts[1] =
+            (p1[1] < p2[1]) ? interval{p1[1], p2[1]} : interval{p2[1], p1[1]};
+        ts[2] =
+            (p1[2] < p2[2]) ? interval{p1[2], p2[2]} : interval{p2[2], p1[2]};
     }
     aabb(const aabb& box1, const aabb& box2) {
         ts[0] = interval{box1.ts[0], box2.ts[0]};

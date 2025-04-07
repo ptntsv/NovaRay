@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "hittable.hpp"
+#include "../hittable_list.hpp"
 
 class bvh_node : public hittable {
     hittable* left = nullptr;
@@ -24,7 +25,7 @@ class bvh_node : public hittable {
     }
 
 public:
-    bvh_node() {}
+    bvh_node(hittable_list list) {}
     bvh_node(std::vector<hittable*> objects, int lo, int hi) {
         for (size_t i = lo; i < hi; i++) {
             hitbox = aabb(hitbox, objects[i]->hitbox);

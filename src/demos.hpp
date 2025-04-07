@@ -6,13 +6,13 @@
 void bulky_demo() {
     hittable_list objlist;
     camera cam{};
-    for (double y = 0; y < 2; y += 0.3) {
-        for (double x = -2; x < 2; x += 0.3) {
+    for (double y = 0; y <= 0.7; y += 0.7) {
+        for (double x = -1.5; x < 1.5; x += 0.3) {
             objlist.add(new sphere{point3{x, y, -1}, 0.1,
                                    new metal{color{0.2, 0.9, 0.4}}});
         }
     }
-    // objlist.build_bvh();
+    objlist.build_bvh();
     cam.render(objlist);
 }
 

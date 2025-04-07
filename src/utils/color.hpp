@@ -8,9 +8,9 @@ using color = vec3;
 double linear_to_gamma(double c) { return (c > 0) ? std::sqrt(c) : 0; }
 
 void write_color(std::ostream& out, const color& pixel_color) {
-    auto r = pixel_color.x();
-    auto g = pixel_color.y();
-    auto b = pixel_color.z();
+    auto r = pixel_color[0];
+    auto g = pixel_color[1];
+    auto b = pixel_color[2];
 
     r = linear_to_gamma(r);
     g = linear_to_gamma(g);

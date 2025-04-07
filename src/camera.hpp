@@ -15,6 +15,7 @@ struct viewport {
              const vec3& viewport_v, const point3& lookfrom,
              const point3& lookat) {
         vec3 w = vec::unit(lookfrom - lookat);
+        // TODO: unused
         vec3 u = vec::unit(viewport_u);
         vec3 v = vec::unit(viewport_v);
 
@@ -60,9 +61,7 @@ class camera {
         vec3 offset = sample_square();
         point3 pixel_sample = vp_.first_pixel + ((i + offset.x()) * vp_.du) +
                               ((j + offset.y()) * vp_.dv);
-        double ray_time = utility::random_double(0, 1);
-
-        return ray{lookfrom, pixel_sample - lookfrom, ray_time};
+        return ray{lookfrom, pixel_sample - lookfrom};
     }
 
     // generates a ray
@@ -88,17 +87,16 @@ class camera {
         hit_record record{};
         interval tint = interval(0.001, utility::inf);
         bool t = objs.hit(r, tint, record);
-        // std::cout << record.t << std::endl;
-        color final_color{0};
+        std::cout << record.t << std::endl;
         if (t) {
             ray scattered;
             color attenuation;
-            if (record.mat->scatter(r, record, attenuation, scattered)) {
-                // return attenuation *
-                //        ray_color(ray{record.p, scattered.direction()}, objs,
-                //                  depth + 1);
-                return attenuation * ray_color(scattered, objs, depth + 1);
-            }
+            // if (record.mat->scatter(r, record, attenuation, scattered)) {
+            //     return attenuation *
+            //            ray_color(ray{record.p, scattered.direction()}, objs,
+            //                      depth + 1);
+            // }
+            return 0.5 * color(record.normal + 1);
             return color{0};
         }
 
@@ -146,7 +144,7 @@ public:
     }
     camera(const point3& lookfrom = {0, 0, 0},
            const point3& lookat = {0, 0, -1}, const vec3& vup = {0, 1, 0},
-           double vva = 60)
+           double vva = 90)
         : lookfrom(lookfrom), lookat(lookat), vup(vup), vva(vva) {
         initialize_camera();
     }

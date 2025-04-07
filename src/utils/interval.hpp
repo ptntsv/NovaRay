@@ -11,7 +11,7 @@ struct interval {
     double lo, hi;
     interval() : lo(utility::inf), hi(-utility::inf) {}
     // If there are some bugs with interval 'orientation'
-    // probably coz in old good days there is an explicit cheking like
+    // probably coz in old good days there is an explicit checking like
     // lo(std::min(left, right)).
     interval(const double& left, const double& right) : lo(left), hi(right) {}
     // interval(const double& left, const double& right)
