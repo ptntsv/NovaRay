@@ -5,7 +5,7 @@
 #include "utils/material.hpp"
 #include "utils/utils.hpp"
 #include "utils/vec3.hpp"
-#include "world.hpp"
+#include "hittable_list.hpp"
 
 struct viewport {
     double width, height;

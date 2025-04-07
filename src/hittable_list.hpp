@@ -7,6 +7,7 @@
 
 class hittable_list : public hittable {
 private:
+    // i hope it's good place to use unique pointers or smth
     std::vector<hittable*>* objs = new std::vector<hittable*>();
     bvh_node* bvh;
 

@@ -1,8 +1,7 @@
 #include "camera.hpp"
+#include "hittable_list.hpp"
 #include "utils/material.hpp"
 #include "utils/sphere.hpp"
-#include "utils/utils.hpp"
-#include "world.hpp"
 
 void bulky_demo() {
     hittable_list objlist;
