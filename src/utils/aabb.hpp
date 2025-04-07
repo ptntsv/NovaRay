@@ -19,7 +19,7 @@ public:
     interval ys() const { return ts[1]; }
     interval zs() const { return ts[2]; }
 
-    aabb() {}
+    aabb() = default;
 
     aabb(const interval& tx, const interval& ty, const interval& tz)
         : ts{tx, ty, tz} {}
@@ -78,5 +78,4 @@ public:
     static const aabb empty;
 };
 
-const aabb aabb::empty =
-    aabb(interval::empty, interval::empty, interval::empty);
+const aabb aabb::empty = aabb(interval::empty, interval::empty, interval::empty);

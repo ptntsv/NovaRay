@@ -36,12 +36,15 @@ public:
 };
 
 class metal : public material {
+    double fuzz;
 public:
-    metal(const color& albedo) : material(albedo) {}
+    metal(const color& albedo, const double fuzz) : material(albedo),
+        fuzz(fuzz < 1 ? fuzz : 1) {}
 
     bool scatter(const ray& ray_in, const hit_record& rec, color& attenuation,
                  ray& scattered) const override {
         vec3 reflected_dir = vec::reflected(ray_in.direction(), rec.normal);
+        reflected_dir = vec::unit(reflected_dir) + (fuzz * vec::random_unit());
         scattered = ray{rec.p, reflected_dir};
         attenuation = albedo;
         return true;
