@@ -11,6 +11,7 @@ enable_testing()
 add_executable(
     main
     main.cpp
+        src/utils/quad.h
 )
 
 add_subdirectory(src)

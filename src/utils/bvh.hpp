@@ -18,20 +18,18 @@ class bvh_node : public hittable {
     static bool compare_along_z(hittable* o1, hittable* o2) {
         return comparator_along_axis(o1, o2, 2);
     }
-    static bool comparator_along_axis(hittable* box1, hittable* box2,
+    static bool comparator_along_axis(const hittable* box1,
+                                      const hittable* box2,
                                       size_t axis) {
         return box1->hitbox.at(axis).lo < box2->hitbox.at(axis).lo;
     }
 
 public:
-    bvh_node() {}
+    bvh_node() = default;
     bvh_node(std::vector<hittable*> objects, int lo, int hi) {
         for (size_t i = lo; i < hi; i++) {
             hitbox = aabb(hitbox, objects[i]->hitbox);
         }
-        // std::cout << lo << " " << hi << std::endl;
-        // std::cout << hitbox << std::endl;
-        // std::cout << "===========\n";
         size_t axis = hitbox.longest_axis();
         auto comparator = (axis == 0)   ? compare_along_x
                           : (axis == 1) ? compare_along_y

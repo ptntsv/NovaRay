@@ -11,7 +11,7 @@ struct interval {
     double lo, hi;
     interval() : lo(utility::inf), hi(-utility::inf) {}
     // If there are some bugs with interval 'orientation'
-    // probably coz in old good days there is an explicit cheking like
+    // probably coz in old good days there is an explicit checking like
     // lo(std::min(left, right)).
     interval(const double& left, const double& right) : lo(left), hi(right) {}
     // interval(const double& left, const double& right)
@@ -19,6 +19,11 @@ struct interval {
     interval(const interval& i1, const interval& i2) {
         lo = std::min(i1.lo, i2.lo);
         hi = std::max(i1.hi, i2.hi);
+    }
+    void expand(double delta) {
+        double padding = delta / 2;
+        lo -= padding;
+        hi += padding;
     }
     double len() const { return hi - lo; }
     bool contains(double x) const { return lo <= x && x <= hi; }
@@ -39,5 +44,4 @@ struct interval {
     static const interval empty;
 };
 
-// const interval interval::empty{0, 0};
 const interval interval::empty{utility::inf, -utility::inf};
