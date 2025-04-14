@@ -3,6 +3,6 @@
 #include "src/demos.hpp"
 
 int main() {
-    motion_blur();
+    metals_demo();
     return 0;
 }

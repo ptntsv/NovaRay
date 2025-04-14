@@ -11,6 +11,7 @@ enable_testing()
 add_executable(
     main
     main.cpp
+        src/utils/bvh.hpp
 )
 
 add_subdirectory(src)
