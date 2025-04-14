@@ -6,13 +6,14 @@
 void bulky_demo() {
     hittable_list objlist;
     camera cam{};
-    for (double y = 0; y < 2; y += 0.3) {
-        for (double x = -2; x < 2; x += 0.3) {
-            objlist.add(new sphere{point3{x, y, -1}, 0.1,
-                                   new metal{color{0.2, 0.9, 0.4}}});
+    point3 s{-0.5, 0, -1};
+    for (size_t y = 0; y <= 1; y++) {
+        for (size_t x = 0; x <= 2; x++) {
+            objlist.add(new sphere(s + point3(x, y, 0), 0.2,
+                                   new metal(color(0.6, 0.4, 0.5))));
         }
     }
-    // objlist.build_bvh();
+    objlist.build_bvh();
     cam.render(objlist);
 }
 
@@ -28,6 +29,7 @@ void arbitrary_camera_demo() {
     world.add(new sphere(point3(1.0, 0.0, -1.0), 0.5, material_right));
 
     camera cam({0, 1, 0}, {0, 0, -1}, {0, 1, 0}, 90);
+    world.build_bvh();
     cam.render(world);
 }
 
@@ -44,6 +46,7 @@ void metals_demo() {
     world.add(new sphere(point3(1.0, 0.0, -1.0), 0.5, material_right));
 
     camera cam({0, 0, 0}, {0, 0, -1}, {0, 1, 0}, 90);
+    world.build_bvh();
     cam.render(world);
 }
 void motion_blur() {

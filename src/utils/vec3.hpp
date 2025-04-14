@@ -8,9 +8,9 @@
 #include "utils.hpp"
 
 class vec3 {
-public:
     double e[3];
 
+public:
     vec3(double e = 0) : e{e, e, e} {}
     vec3(double e0, double e1, double e2) : e{e0, e1, e2} {}
     vec3(const vec3& other)
@@ -59,11 +59,11 @@ public:
 using point3 = vec3;
 
 std::ostream& operator<<(std::ostream& out, const vec3& v) {
-    return out << v.e[0] << ' ' << v.e[1] << ' ' << v.e[2];
+    return out << v[0] << ' ' << v[1] << ' ' << v[2];
 }
 
 vec3 operator+(const vec3& u, const double& t) {
-    return vec3(u.e[0] + t, u.e[1] + t, u.e[2] + t);
+    return vec3(u[0] + t, u[1] + t, u[2] + t);
 }
 
 vec3 operator+(const vec3& v, const vec3& w) {
@@ -88,13 +88,12 @@ vec3 operator/(const vec3& v, double t) { return (1 / t) * v; }
 namespace vec {
 
 double dot(const vec3& u, const vec3& v) {
-    return u.e[0] * v.e[0] + u.e[1] * v.e[1] + u.e[2] * v.e[2];
+    return u[0] * v[0] + u[1] * v[1] + u[2] * v[2];
 }
 
 vec3 cross(const vec3& u, const vec3& v) {
-    return vec3(u.e[1] * v.e[2] - u.e[2] * v.e[1],
-                u.e[2] * v.e[0] - u.e[0] * v.e[2],
-                u.e[0] * v.e[1] - u.e[1] * v.e[0]);
+    return vec3(u[1] * v[2] - u[2] * v[1], u[2] * v[0] - u[0] * v[2],
+                u[0] * v[1] - u[1] * v[0]);
 }
 
 vec3 unit(const vec3& v) { return v / v.length(); }

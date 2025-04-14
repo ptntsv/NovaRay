@@ -15,6 +15,7 @@ struct viewport {
              const vec3& viewport_v, const point3& lookfrom,
              const point3& lookat) {
         vec3 w = vec::unit(lookfrom - lookat);
+        // TODO: unused
         vec3 u = vec::unit(viewport_u);
         vec3 v = vec::unit(viewport_v);
 
@@ -72,7 +73,7 @@ class camera {
     }
 
     // calculates average color of bunch rays
-    color avg_color(int i, int j, hittable_list& objs) {
+    color avg_color(int i, int j, hittable& objs) {
         color pcolor{0};
         for (size_t k = 0; k < samples_n; k++) {
             ray r{produce_sample_ray(i, j)};
@@ -82,24 +83,19 @@ class camera {
         return pcolor / samples_n;
     }
 
-    color ray_color(const ray& r, hittable_list& objs, int depth = 0) {
+    color ray_color(const ray& r, hittable& objs, int depth = 0) {
         if (depth >= bounces_limit)
             return color{0};
         hit_record record{};
         interval tint = interval(0.001, utility::inf);
         bool t = objs.hit(r, tint, record);
-        // std::cout << record.t << std::endl;
-        color final_color{0};
         if (t) {
             ray scattered;
             color attenuation;
-            if (record.mat->scatter(r, record, attenuation, scattered)) {
-                // return attenuation *
-                //        ray_color(ray{record.p, scattered.direction()}, objs,
-                //                  depth + 1);
+            if (record.mat && record.mat->scatter(r, record, attenuation, scattered))
                 return attenuation * ray_color(scattered, objs, depth + 1);
-            }
-            return color{0};
+            // return 0.5 * color(record.normal + 1);
+            // return color{0};
         }
 
         vec3 unit = vec::unit(r.direction());
@@ -134,7 +130,7 @@ class camera {
     }
 
 public:
-    void render(hittable_list& objs) {
+    void render(hittable& objs) {
         std::cout << "P3\n"
                   << image_width_ << ' ' << image_height_ << "\n255\n";
         for (size_t j = 0; j < image_height_; j++) {
@@ -146,7 +142,7 @@ public:
     }
     camera(const point3& lookfrom = {0, 0, 0},
            const point3& lookat = {0, 0, -1}, const vec3& vup = {0, 1, 0},
-           double vva = 60)
+           double vva = 120)
         : lookfrom(lookfrom), lookat(lookat), vup(vup), vva(vva) {
         initialize_camera();
     }

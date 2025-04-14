@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <iostream>
 
+#include "../hittable_list.hpp"
 #include "hittable.hpp"
 
 class bvh_node : public hittable {
@@ -19,8 +20,7 @@ class bvh_node : public hittable {
         return comparator_along_axis(o1, o2, 2);
     }
     static bool comparator_along_axis(const hittable* box1,
-                                      const hittable* box2,
-                                      size_t axis) {
+                                      const hittable* box2, size_t axis) {
         return box1->hitbox.at(axis).lo < box2->hitbox.at(axis).lo;
     }
 
@@ -46,15 +46,12 @@ public:
             left = new bvh_node(objects, lo, mid);
             right = new bvh_node(objects, mid, hi);
         }
-        if (left)
-            hitbox = aabb(left->hitbox, hitbox);
-        if (right)
-            hitbox = aabb(right->hitbox, hitbox);
+        if (left) hitbox = aabb(left->hitbox, hitbox);
+        if (right) hitbox = aabb(right->hitbox, hitbox);
     }
     bvh_node(bvh_node* left, bvh_node* right) : left(left), right(right) {}
     bool hit(const ray& ray, interval tint, hit_record& record) override {
-        if (!hitbox.hit(ray, tint))
-            return false;
+        if (!hitbox.hit(ray, tint)) return false;
 
         bool lfound = left ? left->hit(ray, tint, record) : true;
         bool rfound =
