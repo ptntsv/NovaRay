@@ -84,15 +84,14 @@ class camera {
     }
 
     color ray_color(const ray& r, hittable& objs, int depth = 0) {
-        if (depth >= bounces_limit)
-            return color{0};
+        if (depth >= bounces_limit) return color{0};
         hit_record record{};
         interval tint = interval(0.001, utility::inf);
         bool t = objs.hit(r, tint, record);
         if (t) {
             ray scattered;
             color attenuation;
-            if (record.mat && record.mat->scatter(r, record, attenuation, scattered))
+            if (record.mat->scatter(r, record, attenuation, scattered))
                 return attenuation * ray_color(scattered, objs, depth + 1);
             // return 0.5 * color(record.normal + 1);
             // return color{0};

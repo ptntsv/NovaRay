@@ -2,26 +2,23 @@
 
 #include <ostream>
 
+#include "fmt_printable.h"
 #include "interval.hpp"
 #include "ray.hpp"
 
-class aabb {
+class aabb : public fmt_printable {
     interval ts[3];
 
     void add_paddings() {
         double delta = 0.0001;
-        if (ts[0].len() < delta)
-            ts[0].expand(delta);
-        if (ts[1].len() < delta)
-            ts[1].expand(delta);
-        if (ts[2].len() < delta)
-            ts[2].expand(delta);
+        if (ts[0].len() < delta) ts[0].expand(delta);
+        if (ts[1].len() < delta) ts[1].expand(delta);
+        if (ts[2].len() < delta) ts[2].expand(delta);
     }
 
 public:
     interval at(size_t axis) const {
-        if (axis > 2)
-            return interval::empty;
+        if (axis > 2) return interval::empty;
         return ts[axis];
     }
     interval xs() const { return ts[0]; }
@@ -48,29 +45,37 @@ public:
     bool hit(const ray& ray, interval out) const {
         point3 q = ray.origin();
         vec3 d = ray.direction();
-        for (size_t axis = 0; axis < 3; axis++) {
+        for (int axis = 0; axis < 3; axis++) {
             double dinv = 1 / d[axis];
 
             double t0 = (ts[axis].lo - q[axis]) * dinv;
             double t1 = (ts[axis].hi - q[axis]) * dinv;
 
             if (t0 < t1) {
-                out.lo = std::max(t0, out.lo);
-                out.hi = std::min(t1, out.hi);
+                if (t0 > out.lo) out.lo = t0;
+                if (t1 < out.hi) out.hi = t1;
+                // out.lo = std::max(t0, out.lo);
+                // out.hi = std::min(t1, out.hi);
             } else {
-                out.lo = std::max(t1, out.lo);
-                out.hi = std::min(t0, out.hi);
+                if (t1 > out.lo) out.lo = t1;
+                if (t0 < out.hi) out.hi = t0;
+                // out.lo = std::max(t1, out.lo);
+                // out.hi = std::min(t0, out.hi);
             }
 
-            if (out.hi <= out.lo)
-                return false;
+            if (out.hi <= out.lo) return false;
+            // if (t1 <= t0) return false;
         }
         return true;
     }
 
+    void fmt_print(int indent) const override {
+        fmt_printable::fmt_print(indent);
+        std::cout << *this << std::endl;
+    }
+
     size_t longest_axis() const {
-        if (xs().len() > ys().len())
-            return (xs().len() > zs().len()) ? 0 : 2;
+        if (xs().len() > ys().len()) return (xs().len() > zs().len()) ? 0 : 2;
         return (ys().len() > zs().len()) ? 1 : 2;
     }
 
@@ -82,6 +87,13 @@ public:
         os << "x: " << box.ts[0] << " ";
         os << "y: " << box.ts[1] << " ";
         os << "z: " << box.ts[2];
+        return os;
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const aabb* box) {
+        os << "x: " << box->ts[0] << " ";
+        os << "y: " << box->ts[1] << " ";
+        os << "z: " << box->ts[2];
         return os;
     }
     static const aabb empty;

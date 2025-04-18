@@ -25,8 +25,8 @@ public:
             tint.hi = tmp_record.t;
             record = tmp_record;
         }
-        // for (size_t i = 0; i < objs->size(); ++i) {
-        //     if (objs->at(i)->hit(ray, tint, tmp_record)) {
+        // for (size_t i = 0; i < objs.size(); ++i) {
+        //     if (objs.at(i)->hit(ray, tint, tmp_record)) {
         //         any = true;
         //         tint.hi = tmp_record.t;
         //         record = tmp_record;
@@ -34,4 +34,6 @@ public:
         // }
         return any;
     }
+
+    void fmt_print(int indent) const override { bvh->fmt_print(indent); }
 };

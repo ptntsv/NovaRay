@@ -50,4 +50,6 @@ public:
         // return zeroone.contains(alpha) && zeroone.contains(beta);
         return (alpha <= v.length()) && (beta <= u.length());
     }
+
+    void fmt_print(int indent) const override { hitbox.fmt_print(indent); }
 };

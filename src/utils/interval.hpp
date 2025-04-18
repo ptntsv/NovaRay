@@ -32,7 +32,7 @@ struct interval {
         assert(other.lo <= other.hi);
         double tmin = std::max(other.lo, lo);
         double tmax = std::min(other.hi, hi);
-        return tmin <= tmax;
+        return tmin < tmax;
     }
     friend std::ostream& operator<<(std::ostream& os, const interval& i) {
         os << "[" << i.lo << ";" << i.hi << "]";

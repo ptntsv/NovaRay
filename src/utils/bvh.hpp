@@ -3,7 +3,6 @@
 #include <algorithm>
 #include <iostream>
 
-#include "../hittable_list.hpp"
 #include "hittable.hpp"
 
 class bvh_node : public hittable {
@@ -49,17 +48,21 @@ public:
         if (left) hitbox = aabb(left->hitbox, hitbox);
         if (right) hitbox = aabb(right->hitbox, hitbox);
     }
-    bvh_node(bvh_node* left, bvh_node* right) : left(left), right(right) {}
     bool hit(const ray& ray, interval tint, hit_record& record) override {
         if (!hitbox.hit(ray, tint)) return false;
 
-        bool lfound = left ? left->hit(ray, tint, record) : true;
+        bool lfound = left ? left->hit(ray, tint, record) : false;
         bool rfound =
             right ? right->hit(ray,
                                interval(tint.lo, lfound ? record.t : tint.hi),
                                record)
-                  : true;
+                  : false;
         return lfound || rfound;
+    }
+    void fmt_print(int indent) const override {
+        hitbox.fmt_print(indent);
+        if (left) left->fmt_print(indent + 1);
+        if (right) right->fmt_print(indent + 1);
     }
     ~bvh_node() {
         delete left;

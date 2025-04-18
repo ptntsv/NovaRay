@@ -4,6 +4,8 @@
 #include "utils/quad.h"
 #include "utils/sphere.hpp"
 
+// #define LOG
+
 void bulky_demo() {
     auto material_ground = new lambertian_reflectance(color(0.8, 0.8, 0.0));
     hittable_list world;
@@ -25,6 +27,9 @@ void bulky_demo() {
     }
     world.add(new sphere(point3(0, 1, -4), 1, new metal(color(0.6, 0.4, 0.5))));
     world.build_bvh();
+#ifdef LOG
+    world.fmt_print(0);
+#endif
     cam.render(world);
 }
 void levitating() {
@@ -45,6 +50,9 @@ void levitating() {
         }
     }
     world.build_bvh();
+#ifdef LOG
+    world.fmt_print(0);
+#endif
     cam.render(world);
 }
 void arbitrary_camera_demo() {
@@ -77,6 +85,9 @@ void metals_demo() {
 
     camera cam({0, 0, 0}, {0, 0, -1}, {0, 1, 0}, 90);
     world.build_bvh();
+#ifdef LOG
+    world.fmt_print(0);
+#endif
     cam.render(world);
 }
 void motion_blur() {

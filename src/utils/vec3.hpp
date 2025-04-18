@@ -49,7 +49,7 @@ public:
     double length_squared() const {
         return e[0] * e[0] + e[1] * e[1] + e[2] * e[2];
     }
-    bool near_zero() {
+    bool near_zero() const {
         double d = 1e-8;
         return (std::abs(e[0]) < d) && (std::abs(e[1]) < d) &&
                (std::abs(e[2]) < d);
