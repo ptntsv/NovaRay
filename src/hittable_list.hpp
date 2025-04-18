@@ -8,10 +8,10 @@
 class hittable_list : public hittable {
     // i hope it's good place to use unique pointers or smth
     std::vector<hittable*> objs{};
-    bvh_node* bvh;
+    bvh_node* bvh = nullptr;
 
 public:
-    hittable_list() { hitbox = aabb::empty; }
+    hittable_list() = default;
     ~hittable_list() { delete bvh; }
     hittable* at(size_t index) const { return objs.at(index); }
     size_t size() const { return objs.size(); }

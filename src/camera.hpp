@@ -142,7 +142,7 @@ public:
     }
     camera(const point3& lookfrom = {0, 0, 0},
            const point3& lookat = {0, 0, -1}, const vec3& vup = {0, 1, 0},
-           double vva = 120)
+           double vva = 90)
         : lookfrom(lookfrom), lookat(lookat), vup(vup), vva(vva) {
         initialize_camera();
     }

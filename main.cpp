@@ -1,5 +1,3 @@
-#include <assert.h>
-
 #include "src/demos.hpp"
 
 int main() {
