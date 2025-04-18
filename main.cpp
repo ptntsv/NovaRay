@@ -1,7 +1,7 @@
 #include "src/demos.hpp"
 
 int main() {
-    switch (1) {
+    switch (3) {
         case 1:
             bulky_demo();
             break;

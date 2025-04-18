@@ -12,7 +12,7 @@ class sphere : public hittable {
     material* mat;
 
 public:
-    bool hit(const ray& ray, interval tint, hit_record& record) override {
+    bool hit(const ray& ray, interval tint, hit_record& record) const override {
         point3 center = is_moving ? center1 + center_vec * ray.time() : center1;
         vec3 oc = center - ray.origin();
         vec3 d = ray.direction();
@@ -54,8 +54,6 @@ public:
         aabb box2(center2 - r, center2 + r);
         hitbox = aabb(box1, box2);
     }
-    void fmt_print(int indent) const override {
-        hitbox.fmt_print(indent);
-    }
+    void fmt_print(int indent) const override { hitbox.fmt_print(indent); }
     ~sphere() { delete mat; }
 };

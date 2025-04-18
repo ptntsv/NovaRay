@@ -20,7 +20,8 @@ struct hit_record {
 class hittable : public fmt_printable {
 public:
     aabb hitbox = aabb::empty;
-    virtual bool hit(const ray& ray, interval tint, hit_record& record) = 0;
-    virtual void fmt_print(int indent) const = 0;
+    virtual bool hit(const ray& ray, interval tint,
+                     hit_record& record) const = 0;
+    virtual void fmt_print(int indent) const { hitbox.fmt_print(indent); }
     virtual ~hittable() = default;
 };

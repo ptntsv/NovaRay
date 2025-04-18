@@ -12,6 +12,7 @@ add_executable(
     main
     main.cpp
         src/utils/fmt_printable.h
+        src/utils/bvh.hpp
 )
 
 add_subdirectory(src)

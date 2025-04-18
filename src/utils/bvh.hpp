@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <iostream>
 
+#include "../hittable_list.hpp"
 #include "hittable.hpp"
 
 class bvh_node : public hittable {
@@ -23,9 +24,7 @@ class bvh_node : public hittable {
         return box1->hitbox.at(axis).lo < box2->hitbox.at(axis).lo;
     }
 
-public:
-    bvh_node() = default;
-    bvh_node(std::vector<hittable*> objects, int lo, int hi) {
+    bvh_node(std::vector<hittable*>& objects, int lo, int hi) {
         for (size_t i = lo; i < hi; i++) {
             hitbox = aabb(hitbox, objects[i]->hitbox);
         }
@@ -48,7 +47,12 @@ public:
         if (left) hitbox = aabb(left->hitbox, hitbox);
         if (right) hitbox = aabb(right->hitbox, hitbox);
     }
-    bool hit(const ray& ray, interval tint, hit_record& record) override {
+
+public:
+    bvh_node() = default;
+    explicit bvh_node(std::vector<hittable*> items)
+        : bvh_node(items, 0, items.size()) {}
+    bool hit(const ray& ray, interval tint, hit_record& record) const override {
         if (!hitbox.hit(ray, tint)) return false;
 
         bool lfound = left ? left->hit(ray, tint, record) : false;

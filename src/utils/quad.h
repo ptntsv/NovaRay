@@ -25,7 +25,7 @@ public:
         D = vec::dot(n, Q);
     }
 
-    bool hit(const ray& ray, interval tint, hit_record& record) override {
+    bool hit(const ray& ray, interval tint, hit_record& record) const override {
         auto denom = vec::dot(n, ray.direction());
         if (std::abs(denom) <= 1e-8) return false;
         auto t = (D - vec::dot(n, ray.origin())) / denom;
@@ -42,7 +42,7 @@ public:
         return true;
     };
 
-    virtual bool is_interior(const point3& intersection) {
+    virtual bool is_interior(const point3& intersection) const {
         vec3 p = intersection - Q;
         auto alpha = vec::dot(w, vec::cross(p, v));
         auto beta = vec::dot(w, vec::cross(u, p));

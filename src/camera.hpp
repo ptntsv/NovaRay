@@ -15,9 +15,6 @@ struct viewport {
              const vec3& viewport_v, const point3& lookfrom,
              const point3& lookat) {
         vec3 w = vec::unit(lookfrom - lookat);
-        // TODO: unused
-        vec3 u = vec::unit(viewport_u);
-        vec3 v = vec::unit(viewport_v);
 
         double focus_dist = (lookfrom - lookat).length();
         center = lookfrom;
@@ -67,26 +64,25 @@ class camera {
     }
 
     // generates a ray
-    ray produce_ray(int i, int j) {
+    ray produce_ray(int i, int j) const {
         point3 pixel{vp_.first_pixel + i * vp_.du + j * vp_.dv};
         return ray{lookfrom, pixel - lookfrom};
     }
 
     // calculates average color of bunch rays
-    color avg_color(int i, int j, hittable& objs) {
+    color avg_color(int i, int j, const hittable& objs) {
         color pcolor{0};
         for (size_t k = 0; k < samples_n; k++) {
             ray r{produce_sample_ray(i, j)};
-            // ray r{produce_ray(i, j)};
             pcolor += ray_color(r, objs);
         }
         return pcolor / samples_n;
     }
 
-    color ray_color(const ray& r, hittable& objs, int depth = 0) {
+    color ray_color(const ray& r, const hittable& objs, int depth = 0) const {
         if (depth >= bounces_limit) return color{0};
         hit_record record{};
-        interval tint = interval(0.001, utility::inf);
+        auto tint = interval(0.001, utility::inf);
         bool t = objs.hit(r, tint, record);
         if (t) {
             ray scattered;
@@ -94,7 +90,6 @@ class camera {
             if (record.mat->scatter(r, record, attenuation, scattered))
                 return attenuation * ray_color(scattered, objs, depth + 1);
             // return 0.5 * color(record.normal + 1);
-            // return color{0};
         }
 
         vec3 unit = vec::unit(r.direction());
@@ -112,7 +107,8 @@ class camera {
         double h = tan(theta / 2);
         double viewport_height = 2.0 * h * (lookfrom - lookat).length();
         double viewport_width =
-            viewport_height * (double(image_width_) / image_height_);
+            viewport_height *
+            (static_cast<double>(image_width_) / image_height_);
 
         vec3 w = vec::unit(lookfrom - lookat);
         vec3 u = vec::unit(vec::cross(vup, w));
@@ -129,7 +125,7 @@ class camera {
     }
 
 public:
-    void render(hittable& objs) {
+    void render(const hittable& objs) {
         std::cout << "P3\n"
                   << image_width_ << ' ' << image_height_ << "\n255\n";
         for (size_t j = 0; j < image_height_; j++) {
@@ -139,6 +135,7 @@ public:
             }
         }
     }
+
     camera(const point3& lookfrom = {0, 0, 0},
            const point3& lookat = {0, 0, -1}, const vec3& vup = {0, 1, 0},
            double vva = 90)

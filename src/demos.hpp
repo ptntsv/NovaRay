@@ -1,5 +1,6 @@
 #include "camera.hpp"
 #include "hittable_list.hpp"
+#include "utils/bvh.hpp"
 #include "utils/material.hpp"
 #include "utils/quad.h"
 #include "utils/sphere.hpp"
@@ -26,11 +27,12 @@ void bulky_demo() {
         }
     }
     world.add(new sphere(point3(0, 1, -4), 1, new metal(color(0.6, 0.4, 0.5))));
-    world.build_bvh();
+    hittable* bvh = new bvh_node(world.items());
 #ifdef LOG
     world.fmt_print(0);
 #endif
-    cam.render(world);
+    cam.render(*bvh);
+    delete bvh;
 }
 void levitating() {
     hittable_list world;
@@ -49,11 +51,11 @@ void levitating() {
             }
         }
     }
-    world.build_bvh();
+    hittable* bvh = new bvh_node(world.items());
 #ifdef LOG
     world.fmt_print(0);
 #endif
-    cam.render(world);
+    cam.render(*bvh);
 }
 void arbitrary_camera_demo() {
     hittable_list world;
@@ -67,24 +69,26 @@ void arbitrary_camera_demo() {
     world.add(new sphere(point3(1.0, 0.0, -1.0), 0.5, material_right));
 
     camera cam({0, 1, 0}, {0, 0, -1}, {0, 1, 0}, 90);
-    world.build_bvh();
-    cam.render(world);
+    hittable* bvh = new bvh_node(world.items());
+#ifdef LOG
+    world.fmt_print(0);
+#endif
+    cam.render(*bvh);
 }
 
 void metals_demo() {
     hittable_list world;
-    // auto material_ground = new lambertian_reflectance(color(0.8, 0.8, 0.0));
+    auto material_ground = new lambertian_reflectance(color(0.8, 0.8, 0.0));
     auto material_center = new lambertian_reflectance(color(0.1, 0.2, 0.5));
     auto material_left = new metal(color(0.8, 0.8, 0.8));
     auto material_right = new metal(color(0.8, 0.6, 0.2));
 
-    // world.add(new sphere(point3(0.0, -100.5, -1.0), 100.0, material_ground));
+    world.add(new sphere(point3(0.0, -100.5, -1.0), 100.0, material_ground));
     world.add(new sphere(point3(0.0, 0.0, -1.0), 0.5, material_center));
     world.add(new sphere(point3(-0.5, 0.0, -1.0), 0.5, material_left));
     world.add(new sphere(point3(0.5, 0.0, -1.0), 0.5, material_right));
 
     camera cam({0, 0, 0}, {0, 0, -1}, {0, 1, 0}, 90);
-    world.build_bvh();
 #ifdef LOG
     world.fmt_print(0);
 #endif
@@ -110,7 +114,6 @@ void planes_demo() {
 
     // Quads
     world.add(new quad(point3(-3, -2, -2), vec3(0, 5, 0), vec3(0, 0, -5), red));
-    world.build_bvh();
     // world.add(make_shared<quad>(point3(-2, -2, 0), vec3(4, 0, 0), vec3(0, 4,
     // 0),
     //                             back_green));
