@@ -2,9 +2,9 @@
 
 #include <ostream>
 
-#include "fmt_printable.h"
-#include "interval.hpp"
-#include "ray.hpp"
+#include "utils/fmt_printable.h"
+#include "utils/interval.hpp"
+#include "utils/ray.hpp"
 
 class aabb : public fmt_printable {
     interval ts[3];
@@ -54,13 +54,9 @@ public:
             if (t0 < t1) {
                 if (t0 > out.lo) out.lo = t0;
                 if (t1 < out.hi) out.hi = t1;
-                // out.lo = std::max(t0, out.lo);
-                // out.hi = std::min(t1, out.hi);
             } else {
                 if (t1 > out.lo) out.lo = t1;
                 if (t0 < out.hi) out.hi = t0;
-                // out.lo = std::max(t1, out.lo);
-                // out.hi = std::min(t0, out.hi);
             }
 
             if (out.hi <= out.lo) return false;

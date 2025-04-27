@@ -2,8 +2,8 @@
 #include <iostream>
 
 #include "hittable_list.hpp"
+#include "material.hpp"
 #include "utils/color.hpp"
-#include "utils/material.hpp"
 #include "utils/utils.hpp"
 #include "utils/vec3.hpp"
 

@@ -1,13 +1,15 @@
 #pragma once
 
+#include <memory>
+
 #include "aabb.hpp"
-#include "ray.hpp"
+#include "utils/ray.hpp"
 
 class material;
 struct hit_record {
     double t;
     point3 p;
-    material* mat;
+    std::shared_ptr<material> mat;
     vec3 normal;
     bool outside;
 
