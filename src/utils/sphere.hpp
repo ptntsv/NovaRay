@@ -3,6 +3,7 @@
 #include "hittable.hpp"
 #include "ray.hpp"
 #include "vec3.hpp"
+#include "material.hpp" //.................new
 
 class sphere : public hittable {
     point3 center1;

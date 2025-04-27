@@ -15,7 +15,9 @@ public:
             delete item;
         }
     }
-    std::vector<hittable*> items() { return items_; }
+    //    std::vector<hittable*> items() { return items_; }
+    std::vector<hittable*>& items() { return items_; } //.................new
+    const std::vector<hittable*>& items() const { return items_; } //.................new
     hittable* at(size_t index) const { return items_.at(index); }
     size_t size() const { return items_.size(); }
     void add(hittable* obj) { items_.push_back(obj); }

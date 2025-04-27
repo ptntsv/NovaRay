@@ -130,3 +130,14 @@ void planes_demo() {
 
     cam.render(world);
 }
+
+void perlin_demo() {
+    hittable_list world;
+
+    world.add(new sphere(point3(0,-1000,0), 1000,new lambertian_reflectance(new noise_texture(4.0))));
+    world.add(new sphere(point3(0,2,0), 2,new lambertian_reflectance(new noise_texture(4.0))));
+
+    camera cam({13,2,3}, {0,0,0}, {0, 1, 0}, 20);
+    hittable* bvh = new bvh_node(world.items());
+    cam.render(*bvh);
+}
