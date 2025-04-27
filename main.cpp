@@ -1,7 +1,7 @@
 #include "src/demos.hpp"
 
 int main() {
-    switch (3) {
+    switch (4) {
         case 1:
             bulky_demo();
             break;
@@ -10,6 +10,9 @@ int main() {
             break;
         case 3:
             metals_demo();
+            break;
+        case 4:
+            planes_demo();
             break;
         default:;
     }

@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
 #include "../src/hittable_list.hpp"
-#include "../src/utils/sphere.hpp"
+#include "../src/primitives/sphere.hpp"
 
 TEST(BvhTest, PrimitiveHitbox) {
     sphere* s1{new sphere(point3{-1, 0, -1}, 5, nullptr)};

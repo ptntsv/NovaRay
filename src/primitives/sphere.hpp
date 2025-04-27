@@ -1,15 +1,15 @@
 #pragma once
 
-#include "hittable.hpp"
-#include "ray.hpp"
-#include "vec3.hpp"
+#include "../hittable.hpp"
+#include "../utils/ray.hpp"
+#include "../utils/vec3.hpp"
 
 class sphere : public hittable {
     point3 center1;
     vec3 center_vec;
     bool is_moving = false;
     double r;
-    material* mat;
+    std::shared_ptr<material> mat;
 
 public:
     bool hit(const ray& ray, interval tint, hit_record& record) const override {
@@ -34,7 +34,8 @@ public:
         return true;
     }
 
-    sphere(const point3& center, const double& r, material* material)
+    sphere(const point3& center, const double& r,
+           std::shared_ptr<material> material)
         : center1(center),
           center_vec(0, 0, 0),
           r(std::fmax(0, r)),
@@ -44,7 +45,7 @@ public:
     }
 
     sphere(const point3& center1, const point3& center2, const double& r,
-           material* material)
+           std::shared_ptr<material> material)
         : center1(center1),
           center_vec(center2 - center1),
           r(std::fmax(0, r)),
@@ -55,5 +56,4 @@ public:
         hitbox = aabb(box1, box2);
     }
     void fmt_print(int indent) const override { hitbox.fmt_print(indent); }
-    ~sphere() { delete mat; }
 };
