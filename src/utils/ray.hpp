@@ -2,17 +2,21 @@
 
 #include "vec3.hpp"
 
-using Point3 = Vec3;
+using point3 = vec3;
 
-class Ray {
-    Point3 orig;
-    Vec3 dir;
+class ray {
+    point3 orig;
+    vec3 dir;
+    double tm;
 
-   public:
-    Ray() {}
-    const Point3& origin() const { return orig; }
-    const Point3& direction() const { return dir; }
-    Ray(const Point3& origin, const Vec3& direction)
-        : orig(origin), dir(direction) {}
-    Ray(const Ray& other) : orig(other.orig), dir(other.dir) {}
+public:
+    ray() {}
+    ray(const point3& origin, const vec3& direction, const double& time = 0)
+        : orig(origin), dir(direction), tm(time) {}
+    ray(const ray& other) : orig(other.orig), dir(other.dir), tm(other.tm) {}
+
+    const point3& origin() const { return orig; }
+    const point3& direction() const { return dir; }
+    const double time() const { return tm; }
+    point3 at(double t) const { return orig + t * dir; }
 };
