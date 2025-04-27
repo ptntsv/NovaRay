@@ -1,9 +1,7 @@
 #pragma once
 
 #include <algorithm>
-#include <iostream>
 
-#include "../hittable_list.hpp"
 #include "hittable.hpp"
 
 class bvh_node : public hittable {

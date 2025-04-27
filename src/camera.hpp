@@ -48,13 +48,13 @@ class camera {
     double vva;       // vertical view angle
 
     // generates a point inside unit square
-    point3 sample_square() const {
+    static point3 sample_square() {
         return point3{utility::random_double(-0.5, 0.5),
                       utility::random_double(-0.5, 0.5), 0};
     }
 
     // generates a ray with some offset
-    ray produce_sample_ray(int i, int j) {
+    ray produce_sample_ray(int i, int j) const {
         vec3 offset = sample_square();
         point3 pixel_sample = vp_.first_pixel + ((i + offset.x()) * vp_.du) +
                               ((j + offset.y()) * vp_.dv);

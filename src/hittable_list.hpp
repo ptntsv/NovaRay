@@ -22,7 +22,7 @@ public:
     bool hit(const ray& ray, interval tint, hit_record& record) const override {
         hit_record tmp_record{};
         bool any = false;
-        for (auto item : items_) {
+        for (auto& item : items_) {
             if (item->hit(ray, tint, tmp_record)) {
                 any = true;
                 tint.hi = tmp_record.t;

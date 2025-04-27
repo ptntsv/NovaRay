@@ -13,6 +13,7 @@ add_executable(
     main.cpp
         src/utils/fmt_printable.h
         src/utils/bvh.hpp
+        src/demos.hpp
 )
 
 add_subdirectory(src)
