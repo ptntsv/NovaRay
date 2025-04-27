@@ -1,7 +1,7 @@
 #include "src/demos.hpp"
 
 int main() {
-    switch (4) {
+    switch (5) {
         case 1:
             bulky_demo();
             break;
@@ -13,6 +13,9 @@ int main() {
             break;
         case 4:
             planes_demo();
+            break;
+        case 5:
+            perlin_demo();
             break;
         default:;
     }

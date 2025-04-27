@@ -158,3 +158,20 @@ void planes_demo() {
     cam.render(*bvh);
     delete bvh;
 }
+
+void perlin_demo() {
+    hittable_list world;
+
+    world.add(new sphere(point3(0,-1000,0), 1000,
+              std::make_shared<lambertian_reflectance>(
+                  std::make_shared<noise_texture>(4.0))));
+
+    world.add(new sphere(point3(0,2,0), 2,
+              std::make_shared<lambertian_reflectance>(
+                  std::make_shared<noise_texture>(4.0))));
+
+    camera cam({13,2,3}, {0,0,0}, {0, 1, 0}, 20);
+    hittable* bvh = new bvh_node(world.items());
+    cam.render(*bvh);
+    delete bvh;
+}
