@@ -60,7 +60,6 @@ public:
             }
 
             if (out.hi <= out.lo) return false;
-            // if (t1 <= t0) return false;
         }
         return true;
     }
