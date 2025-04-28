@@ -1,7 +1,7 @@
 #include "src/demos.hpp"
 
 int main() {
-    switch (5) {
+    switch (7) {
         case 1:
             bulky_demo();
             break;
@@ -16,6 +16,12 @@ int main() {
             break;
         case 5:
             perlin_demo();
+            break;
+        case 6:
+            quads();
+            break;
+        case 7:
+            boxes_demo();
             break;
         default:;
     }

@@ -16,6 +16,26 @@ protected:
     }
 
 public:
+    static hittable_list box(const point3& p0, const point3& p1,
+                             const shared_ptr<material>& mat) {
+        std::vector<shared_ptr<hittable>> sides;
+        auto dx = vec3(p1.x() - p0.x(), 0, 0);
+        auto dy = vec3(0, p1.y() - p0.y(), 0);
+        auto dz = vec3(0, 0, p1.z() - p0.z());
+        sides.push_back(
+            make_shared<quad>(point3(p0.x(), p0.y(), p0.z()), dx, dy, mat));
+        sides.push_back(
+            make_shared<quad>(point3(p1.x(), p0.y(), p1.z()), -dz, dy, mat));
+        sides.push_back(
+            make_shared<quad>(point3(p1.x(), p0.y(), p0.z()), -dx, dy, mat));
+        sides.push_back(
+            make_shared<quad>(point3(p0.x(), p0.y(), p0.z()), dz, dy, mat));
+        sides.push_back(
+            make_shared<quad>(point3(p0.x(), p1.y(), p1.z()), dx, -dz, mat));
+        sides.push_back(
+            make_shared<quad>(point3(p0.x(), p0.y(), p0.z()), dx, dz, mat));
+        return hittable_list(sides);
+    }
     quad() = default;
     quad(const point3& q, const vec3& v, const vec3& u,
          std::shared_ptr<material> mat)
@@ -51,8 +71,10 @@ public:
         auto beta = vec::dot(w, vec::cross(u, p));
         interval zeroone{0, 1};
         return zeroone.contains(alpha) && zeroone.contains(beta);
-        // return (alpha <= v.length()) && (beta <= u.length());
     }
 
     void fmt_print(int indent) const override { hitbox.fmt_print(indent); }
+    operator hittable_list() override {
+        return hittable_list(std::make_shared<quad>(*this));
+    }
 };

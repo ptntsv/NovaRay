@@ -9,7 +9,7 @@ class sphere : public hittable {
     vec3 center_vec;
     bool is_moving = false;
     double r;
-    std::shared_ptr<material> mat;
+    shared_ptr<material> mat;
 
 public:
     bool hit(const ray& ray, interval tint, hit_record& record) const override {
@@ -33,19 +33,19 @@ public:
         record.mat = mat;
         return true;
     }
+    sphere(const sphere& other) = default;
 
     sphere(const point3& center, const double& r,
-           std::shared_ptr<material> material)
+           const shared_ptr<material>& material)
         : center1(center),
           center_vec(0, 0, 0),
           r(std::fmax(0, r)),
-          mat(material),
-          is_moving(false) {
+          mat(material) {
         hitbox = aabb{center1 - r, center1 + r};
     }
 
     sphere(const point3& center1, const point3& center2, const double& r,
-           std::shared_ptr<material> material)
+           const shared_ptr<material>& material)
         : center1(center1),
           center_vec(center2 - center1),
           r(std::fmax(0, r)),
@@ -56,4 +56,7 @@ public:
         hitbox = aabb(box1, box2);
     }
     void fmt_print(int indent) const override { hitbox.fmt_print(indent); }
+    operator hittable_list() override {
+        return hittable_list(std::make_shared<sphere>(*this));
+    }
 };

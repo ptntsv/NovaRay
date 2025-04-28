@@ -1,9 +1,10 @@
 #pragma once
 
+#include <memory>
+
+#include "perlin.hpp"
 #include "utils/color.hpp"
 #include "utils/vec3.hpp"
-#include "perlin.hpp"
-#include <memory>
 
 class texture {
 public:
@@ -17,9 +18,7 @@ public:
     solid_color(double red, double green, double blue)
         : solid_color(color(red, green, blue)) {}
 
-    color value(const point3& p) const override {
-        return albedo;
-    }
+    color value(const point3& p) const override { return albedo; }
 
 private:
     color albedo;
@@ -37,7 +36,8 @@ public:
         // return color(1, 1, 1) * noise.turb(scale * p, 7);
 
         // marble
-        return color(0.5, 0.5, 0.5) * (1 + sin(scale * p.z() + 10 * noise.turb(p)));
+        return color(0.5, 0.5, 0.5) *
+               (1 + sin(scale * p.z() + 10 * noise.turb(p)));
     }
 
 private:

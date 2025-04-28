@@ -1,9 +1,12 @@
 #pragma once
 #include <iostream>
 
-#include "hittable_list.hpp"
+#include "hittable.hpp"
+// DO NOT TOUCH IT
 #include "material.hpp"
+// ---------------
 #include "utils/color.hpp"
+#include "utils/ray.hpp"
 #include "utils/utils.hpp"
 #include "utils/vec3.hpp"
 
@@ -98,7 +101,7 @@ class camera {
         return (1.0 - y) * color{1.0, 1.0, 1.0} + y * color{.2, .2, 1.0};
     }
     void initialize_camera() {
-        image_width_ = 800;
+        image_width_ = 1000;
         ratio_ = 16.0 / 9.0;
         image_height_ = static_cast<int>(image_width_ / ratio_);
         image_height_ = (image_height_ < 1) ? 1 : image_height_;
