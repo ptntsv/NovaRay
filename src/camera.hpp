@@ -79,7 +79,7 @@ class camera {
         return pcolor / samples_n;
     }
 
-    color ray_color(const ray& r, const hittable& objs, int depth = 0) const {
+    color ray_color(const ray& r, const hittable& objs, int depth = 0, bool use_black_bg = false) const {
         if (depth >= bounces_limit) return color{0};
         hit_record record{};
         auto tint = interval(0.001, utility::inf);
@@ -87,9 +87,15 @@ class camera {
         if (t) {
             ray scattered;
             color attenuation;
-            if (record.mat->scatter(r, record, attenuation, scattered))
-                return attenuation * ray_color(scattered, objs, depth + 1);
+            color emitted = record.mat->emitted(record.p);
+            if (!record.mat->scatter(r, record, attenuation, scattered))
+                return emitted;
+            return emitted +  attenuation * ray_color(scattered, objs, depth + 1);
             // return 0.5 * color(record.normal + 1);
+        }
+
+        if (use_black_bg) {
+            return color{0, 0, 0};
         }
 
         vec3 unit = vec::unit(r.direction());
@@ -97,6 +103,7 @@ class camera {
             .5 * (unit.y() + 1.0);  // generally it depends on viewport height
         return (1.0 - y) * color{1.0, 1.0, 1.0} + y * color{.2, .2, 1.0};
     }
+
     void initialize_camera() {
         image_width_ = 800;
         ratio_ = 16.0 / 9.0;

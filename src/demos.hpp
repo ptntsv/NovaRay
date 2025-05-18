@@ -158,3 +158,75 @@ void planes_demo() {
     cam.render(*bvh);
     delete bvh;
 }
+
+void basic_perlin_demo() {
+    hittable_list world;
+
+    world.add(new sphere(point3(0,-1000,0), 1000,
+              std::make_shared<lambertian_reflectance>(
+                  std::make_shared<basic_noise_texture>())));
+
+    world.add(new sphere(point3(0,2,0), 2,
+              std::make_shared<lambertian_reflectance>(
+                  std::make_shared<basic_noise_texture>())));
+
+    camera cam({13,2,3}, {0,0,0}, {0, 1, 0}, 20);
+    hittable* bvh = new bvh_node(world.items());
+    cam.render(*bvh);
+    delete bvh;
+}
+
+void interpolated_perlin_demo() {
+    hittable_list world;
+
+    world.add(new sphere(point3(0,-1000,0), 1000,
+              std::make_shared<lambertian_reflectance>(
+                  std::make_shared<interpolated_noise_texture>(2.0))));
+
+    world.add(new sphere(point3(0,2,0), 2,
+              std::make_shared<lambertian_reflectance>(
+                  std::make_shared<interpolated_noise_texture>(2.0))));
+
+    camera cam({13,2,3}, {0,0,0}, {0, 1, 0}, 20);
+    hittable* bvh = new bvh_node(world.items());
+    cam.render(*bvh);
+    delete bvh;
+}
+
+void perlin_demo() {
+    hittable_list world;
+
+    world.add(new sphere(point3(0,-1000,0), 1000,
+              std::make_shared<lambertian_reflectance>(
+                  std::make_shared<noise_texture>(4.0))));
+
+    world.add(new sphere(point3(0,2,0), 2,
+              std::make_shared<lambertian_reflectance>(
+                  std::make_shared<noise_texture>(4.0))));
+
+    camera cam({13,2,3}, {0,0,0}, {0, 1, 0}, 20);
+    hittable* bvh = new bvh_node(world.items());
+    cam.render(*bvh);
+    delete bvh;
+}
+
+void simple_light() {
+    hittable_list world;
+
+    world.add(new sphere(point3(0,-1000,0), 1000,
+                         std::make_shared<lambertian_reflectance>(
+                             std::make_shared<noise_texture>(4.0))));
+
+    world.add(new sphere(point3(0,2,0), 2,
+                         std::make_shared<lambertian_reflectance>(
+                             std::make_shared<noise_texture>(4.0))));
+
+    auto light = std::make_shared<diffuse_light>(color(4,4,4));
+    world.add(new sphere(point3(0,7,0), 2, light));
+    world.add(new quad(point3(3,1,-2), vec3(2,0,0), vec3(0,2,0), light));
+
+    camera cam{{26,4,6}, {0,0,0}, {0,1,0}, 30};
+    auto bvh = new bvh_node(world.items());
+    cam.render(*bvh);
+    delete bvh;
+}
