@@ -6,6 +6,7 @@
 #include "utils/color.hpp"
 #include "utils/utils.hpp"
 #include "utils/vec3.hpp"
+#include "denoiser.hpp"
 
 struct viewport {
     double width, height;
@@ -132,14 +133,21 @@ class camera {
     }
 
 public:
-    void render(const hittable& objs) {
-        std::cout << "P3\n"
-                  << image_width_ << ' ' << image_height_ << "\n255\n";
+    void render(const hittable& objs, bool use_denoiser = false) {
+        std::cout << "P3\n" << image_width_ << ' ' << image_height_ << "\n255\n";
+        std::vector<color> pixel_cache(image_width_ * image_height_);
         for (size_t j = 0; j < image_height_; j++) {
             for (size_t i = 0; i < image_width_; i++) {
-                color final_color = avg_color(i, j, objs);
-                write_color(std::cout, final_color);
+                pixel_cache[j * image_width_ + i] = avg_color(i, j, objs);
             }
+        }
+
+        std::vector<color> output_image = (use_denoiser)
+                                              ? GaussianBlur::apply(pixel_cache, image_width_, image_height_, 2.0f, 3)
+                                              : pixel_cache;
+
+        for (const auto& col : output_image) {
+            write_color(std::cout, col);
         }
     }
 
