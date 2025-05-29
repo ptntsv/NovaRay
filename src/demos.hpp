@@ -1,14 +1,16 @@
 #pragma once
+#include <fstream>
 #include <memory>
 
 #include "bvh.hpp"
 #include "camera.hpp"
 #include "material.hpp"
 #include "primitives//sphere.hpp"
-#include "primitives/box.hpp"
 #include "primitives/quad.hpp"
 
 // #define LOG
+
+std::ofstream ostrm = std::ofstream("../image.ppm", std::ios::out);
 
 void bulky_demo() {
     auto material_ground =
@@ -38,7 +40,7 @@ void bulky_demo() {
 #ifdef LOG
     world.fmt_print(0);
 #endif
-    cam.render(*bvh);
+    cam.render(*bvh, ostrm);
     delete bvh;
 }
 void levitating() {
@@ -64,7 +66,7 @@ void levitating() {
 #ifdef LOG
     world.fmt_print(0);
 #endif
-    cam.render(*bvh);
+    cam.render(*bvh, ostrm);
     delete bvh;
 }
 void arbitrary_camera_demo() {
@@ -86,7 +88,7 @@ void arbitrary_camera_demo() {
 #ifdef LOG
     world.fmt_print(0);
 #endif
-    cam.render(*bvh);
+    cam.render(*bvh, ostrm);
     delete bvh;
 }
 
@@ -111,7 +113,7 @@ void metals_demo() {
 #ifdef LOG
     world.fmt_print(0);
 #endif
-    cam.render(*bvh);
+    cam.render(*bvh, ostrm);
     delete bvh;
 }
 void motion_blur() {
@@ -130,7 +132,7 @@ void motion_blur() {
     camera cam({-1.5, 0.5, 0}, {0, 0, -1}, {0, 1, 0}, 90);
 
     auto bvh = new bvh_node(world);
-    cam.render(*bvh);
+    cam.render(*bvh, ostrm);
     delete bvh;
 }
 void planes_demo() {
@@ -162,7 +164,7 @@ void planes_demo() {
 
     camera cam({0, 0, 0}, {0, 0, -1}, {0, 1, 0}, 90);
     auto bvh = new bvh_node(world);
-    cam.render(*bvh);
+    cam.render(*bvh, ostrm);
     delete bvh;
 }
 
@@ -179,7 +181,7 @@ void perlin_demo() {
 
     camera cam({13, 2, 3}, {0, 0, 0}, {0, 1, 0}, 20);
     hittable* bvh = new bvh_node(world);
-    cam.render(*bvh);
+    cam.render(*bvh, ostrm);
     delete bvh;
 }
 
@@ -208,7 +210,7 @@ void quads() {
 
     camera cam(point3{0, 0, 9}, {0, 0, 0}, {0, 1, 0}, 60);
     auto bvh = new bvh_node(world);
-    cam.render(*bvh);
+    cam.render(*bvh, ostrm);
     delete bvh;
 }
 
@@ -227,6 +229,32 @@ void boxes_demo() {
 
     camera cam({0, 3, 5}, {0, 0, -1}, {0, 1, 0}, 60);
     auto bvh = new bvh_node(world);
-    cam.render(*bvh);
+    cam.render(*bvh, ostrm);
     delete bvh;
+}
+
+void cornell_box() {
+    hittable_list world;
+
+    auto red = make_shared<lambertian_reflectance>(color(.65, .05, .05));
+    auto white = make_shared<lambertian_reflectance>(color(.73, .73, .73));
+    auto green = make_shared<lambertian_reflectance>(color(.12, .45, .15));
+    auto light = make_shared<diffuse_light>(color(15, 15, 15));
+
+    world.add(make_shared<quad>(point3(555, 0, 0), vec3(0, 555, 0),
+                                vec3(0, 0, 555), green));
+    world.add(make_shared<quad>(point3(0, 0, 0), vec3(0, 555, 0),
+                                vec3(0, 0, 555), red));
+    // world.add(make_shared<quad>(point3(343, 554, 332), vec3(-130, 0, 0),
+    //                             vec3(0, 0, -105), light));
+    world.add(make_shared<quad>(point3(0, 0, 0), vec3(555, 0, 0),
+                                vec3(0, 0, 555), white));
+    world.add(make_shared<quad>(point3(555, 555, 555), vec3(-555, 0, 0),
+                                vec3(0, 0, -555), white));
+    // world.add(make_shared<quad>(point3(0, 0, 555), vec3(555, 0, 0),
+    //                             vec3(0, 555, 0), white));
+
+    camera cam({178, 278, -800}, {278, 278, 0}, {0, 1, 0}, 40);
+    auto bvh = std::make_shared<bvh_node>(world);
+    cam.render(*bvh, ostrm);
 }

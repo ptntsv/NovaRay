@@ -4,6 +4,7 @@
 #include <limits>
 #include <memory>
 #include <random>
+#include <thread>
 
 using std::make_shared;
 using std::shared_ptr;
@@ -11,8 +12,8 @@ using std::shared_ptr;
 namespace utility {
 double inf = std::numeric_limits<double>::infinity();
 double random_double(double min, double max) {
-    static std::uniform_real_distribution<double> distr(min, max);
-    static std::mt19937 gen;
+    thread_local std::mt19937 gen;
+    std::uniform_real_distribution<> distr(min, max);
     return distr(gen);
 }
 

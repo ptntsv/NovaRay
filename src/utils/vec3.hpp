@@ -11,12 +11,6 @@ class vec3 {
 public:
     vec3(double e = 0) : e{e, e, e} {}
     vec3(double e0, double e1, double e2) : e{e0, e1, e2} {}
-    vec3(const vec3& other)
-        : e{
-              other.e[0],
-              other.e[1],
-              other.e[2],
-          } {};
 
     double x() const { return e[0]; }
     double y() const { return e[1]; }
@@ -105,16 +99,14 @@ vec3 random_unit() {
     while (true) {
         vec3 p = vec::random(-1, 1);
         double len_sq = p.length_squared();
-        if (1e-160 < len_sq && len_sq <= 1)
-            return p / sqrt(len_sq);
+        if (1e-160 < len_sq && len_sq <= 1) return p / sqrt(len_sq);
     }
 }
 // maybe it'll be better to move it to hittable
 // with some fancy name like 'unit on surface'
 vec3 random_unit_on_hemisphere(const vec3& normal) {
     vec3 on_surface = random_unit();
-    if (vec::dot(normal, on_surface) > 0)
-        return on_surface;
+    if (vec::dot(normal, on_surface) > 0) return on_surface;
     return -on_surface;
 }
 vec3 reflected(const vec3& v, const vec3& n) { return v - 2 * dot(v, n) * n; }

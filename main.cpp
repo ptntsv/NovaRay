@@ -1,7 +1,7 @@
 #include "src/demos.hpp"
 
 int main() {
-    switch (7) {
+    switch (1) {
         case 1:
             bulky_demo();
             break;
@@ -22,6 +22,9 @@ int main() {
             break;
         case 7:
             boxes_demo();
+            break;
+        case 8:
+            cornell_box();
             break;
         default:;
     }
