@@ -11,7 +11,10 @@ enable_testing()
 add_executable(
     main
     main.cpp
+        src/utils/fmt_printable.h
+        src/utils/bvh.hpp
+        src/demos.hpp
 )
 
 add_subdirectory(src)
-# add_subdirectory(tests)
+add_subdirectory(tests)
